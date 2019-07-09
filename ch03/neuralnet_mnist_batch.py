@@ -13,7 +13,7 @@ def get_data():
 
 
 def init_network():
-    with open("sample_weight.pkl", 'rb') as f:
+    with open("D:\git document\deep-learning-from-scratch\ch03\sample_weight.pkl", 'rb') as f:
         network = pickle.load(f)
     return network
 
