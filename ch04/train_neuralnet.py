@@ -6,11 +6,12 @@ import matplotlib.pyplot as plt
 from dataset.mnist import load_mnist
 from two_layer_net import TwoLayerNet
 
-# データの読み込み
+#輸入data
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
+#超參數
 iters_num = 10000  # 繰り返しの回数を適宜設定する
 train_size = x_train.shape[0]
 batch_size = 100
@@ -20,24 +21,28 @@ train_loss_list = []
 train_acc_list = []
 test_acc_list = []
 
+#每一 epoch重複的次數
 iter_per_epoch = max(train_size / batch_size, 1)
 
 for i in range(iters_num):
+    #取得小批次
     batch_mask = np.random.choice(train_size, batch_size)
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
     
-    # 勾配の計算
+    # 計算梯度
     #grad = network.numerical_gradient(x_batch, t_batch)
     grad = network.gradient(x_batch, t_batch)
     
-    # パラメータの更新
+    # 更新參數
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key]
-    
+
+    # 記錄學習過程
     loss = network.loss(x_batch, t_batch)
     train_loss_list.append(loss)
-    
+
+    #計算1 epoch的辨識準確度
     if i % iter_per_epoch == 0:
         train_acc = network.accuracy(x_train, t_train)
         test_acc = network.accuracy(x_test, t_test)
